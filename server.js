@@ -6,7 +6,7 @@
  *
  * Booking requests (POST /api/book) are delivered in real time to:
  *   • Email  -> BOOKING_EMAIL (default estherngandji2437@yahoo.com) via Resend
- *   • SMS    -> BOOKING_PHONE (default +13463044065) via Twilio
+ *   • SMS    -> BOOKING_PHONE (default +12815412536) via Twilio
  * Each channel activates only when its env keys are present:
  *   Email: RESEND_API_KEY (+ GLAM_MAIL_FROM, a verified Resend sender)
  *   SMS:   TWILIO_ACCOUNT_SID + TWILIO_AUTH_TOKEN + TWILIO_FROM
@@ -19,7 +19,7 @@ const path = require('node:path');
 const PORT = process.env.PORT || 8080;
 const ROOT = path.join(__dirname, 'public');
 const BOOKING_EMAIL = process.env.BOOKING_EMAIL || 'estherngandji2437@yahoo.com';
-const BOOKING_PHONE = process.env.BOOKING_PHONE || '+13463044065';
+const BOOKING_PHONE = process.env.BOOKING_PHONE || '+12815412536';
 const MAIL_FROM = process.env.GLAM_MAIL_FROM || 'Glam Salon de Beauté <no-reply@glamsalon.app>';
 
 const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.png': 'image/png',
