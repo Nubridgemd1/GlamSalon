@@ -1,0 +1,9 @@
+{
+  "name": "glam-salon-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Glam Salon de Beauté — braiding salon website with real-time booking notifications (email + SMS).",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
