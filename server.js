@@ -20,6 +20,8 @@ const PORT = process.env.PORT || 8080;
 const ROOT = path.join(__dirname, 'public');
 const BOOKING_EMAIL = process.env.BOOKING_EMAIL || 'estherngandji2437@yahoo.com';
 const BOOKING_PHONE = process.env.BOOKING_PHONE || '+12815412536';
+// AT&T email-to-SMS gateway → delivers booking alerts as a text via Resend (no Twilio needed)
+const BOOKING_SMS_EMAIL = process.env.BOOKING_SMS_EMAIL || '2815412536@txt.att.net';
 const MAIL_FROM = process.env.GLAM_MAIL_FROM || 'Glam Salon de Beauté <no-reply@glamsalon.app>';
 
 const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.png': 'image/png',
@@ -38,6 +40,16 @@ async function sendEmail(subject, lines) {
     body: JSON.stringify({ from: MAIL_FROM, to: BOOKING_EMAIL, reply_to: undefined, subject, html }),
   });
   if (!res.ok) throw new Error('email ' + res.status + ' ' + (await res.text()).slice(0, 160));
+  return { ok: true };
+}
+// SMS via carrier email-to-text gateway (uses Resend; activates with RESEND_API_KEY)
+async function sendGatewaySMS(text) {
+  if (!process.env.RESEND_API_KEY || !BOOKING_SMS_EMAIL) return { skipped: true };
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST', headers: { Authorization: 'Bearer ' + process.env.RESEND_API_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from: MAIL_FROM, to: BOOKING_SMS_EMAIL, subject: 'New booking', text }),
+  });
+  if (!res.ok) throw new Error('gateway-sms ' + res.status + ' ' + (await res.text()).slice(0, 160));
   return { ok: true };
 }
 async function sendSMS(body) {
@@ -64,7 +76,8 @@ async function handleBook(req, res) {
     const smsText = `New booking — Glam Salon\n${name} · ${phone}\n${d.service || ''} ${d.date || ''} ${d.time || ''}`.trim();
     const results = await Promise.allSettled([
       sendEmail(`New booking: ${name} — ${d.service || 'appointment'}`, fields),
-      sendSMS(smsText),
+      sendGatewaySMS(smsText),   // text via AT&T email-to-SMS gateway
+      sendSMS(smsText),          // text via Twilio (if configured)
     ]);
     console.log('[booking]', JSON.stringify({ name, phone, service: d.service, date: d.date, time: d.time }));
     const delivered = results.some(r => r.status === 'fulfilled' && r.value && r.value.ok);
