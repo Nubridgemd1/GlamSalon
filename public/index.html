@@ -178,7 +178,7 @@
       <p>Hand‑crafted protective styles, tailored to your length, texture and vibe.</p>
     </div>
     <div class="look" id="lookgrid"></div>
-    <p style="text-align:center;color:var(--ink3);font-size:13px;margin-top:26px">Pricing starts from; final quote depends on length, size &amp; add‑ons. Consultations are free.</p>
+    <p style="text-align:center;color:var(--ink3);font-size:13px;margin-top:26px">Every style is tailored to your length, size &amp; vibe — free consultations available.</p>
   </div>
 </section>
 
@@ -291,7 +291,6 @@
   document.getElementById('lookgrid').innerHTML = STYLES.map(([n,d,p,id])=>`
     <div class="style">
       <div class="photo" style="background-image:url('${IMG(id)}')">
-        <span class="price">from ${p}</span>
         <span class="nm">${n}</span>
       </div>
       <div class="meta"><p>${d}</p><a href="#book">Book this style →</a></div>
