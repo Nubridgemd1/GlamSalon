@@ -1,0 +1,12 @@
+{
+  "styles": [
+    { "id": "box-braids", "name": "Box Braids", "price": "$150", "duration": "4–6 hrs", "desc": "Timeless, versatile and protective — from waist-length to bob.", "image": "https://images.unsplash.com/photo-1594254773847-9fce26e950bc?w=640&h=820&fit=crop&q=72&auto=format" },
+    { "id": "knotless-braids", "name": "Knotless Braids", "price": "$180", "duration": "5–7 hrs", "desc": "Lightweight, natural-looking and gentle on your edges.", "image": "https://images.unsplash.com/photo-1572955304332-bf714bd49add?w=640&h=820&fit=crop&q=72&auto=format" },
+    { "id": "cornrows", "name": "Cornrows", "price": "$80", "duration": "1–2 hrs", "desc": "Sleek straight-backs or intricate freestyle designs.", "image": "https://images.unsplash.com/photo-1673470907547-1c0c6a996095?w=640&h=820&fit=crop&q=72&auto=format" },
+    { "id": "goddess-braids", "name": "Goddess Braids", "price": "$160", "duration": "3–4 hrs", "desc": "Bohemian curls woven through for a soft, romantic finish.", "image": "https://images.unsplash.com/photo-1631955081622-fb57ae4cb686?w=640&h=820&fit=crop&q=72&auto=format" },
+    { "id": "faux-locs", "name": "Faux Locs", "price": "$200", "duration": "5–8 hrs", "desc": "Boho or sleek faux locs for effortless, lasting glam.", "image": "https://images.unsplash.com/photo-1593529334658-a243a47ad02e?w=640&h=820&fit=crop&q=72&auto=format" },
+    { "id": "senegalese-twists", "name": "Senegalese Twists", "price": "$170", "duration": "4–6 hrs", "desc": "Smooth, rope-like twists with a polished shine.", "image": "https://images.unsplash.com/photo-1759756655332-d66200497312?w=640&h=820&fit=crop&q=72&auto=format" },
+    { "id": "fulani-braids", "name": "Fulani Braids", "price": "$140", "duration": "3–4 hrs", "desc": "Statement cornrow-and-braid patterns with beads.", "image": "https://images.unsplash.com/photo-1614173968962-0e61c5ed196f?w=640&h=820&fit=crop&q=72&auto=format" },
+    { "id": "feed-in-braids", "name": "Feed-in Braids", "price": "$90", "duration": "1.5–2 hrs", "desc": "Natural, seamless ponytails and protective updos.", "image": "https://images.unsplash.com/photo-1698299708000-bb14e23fe2df?w=640&h=820&fit=crop&q=72&auto=format" }
+  ]
+}

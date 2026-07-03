@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex" />
+<title>Glam Salon — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{--plum:#33102a;--wine:#5d1c46;--gold:#caa14e;--gold2:#e6c878;--blush:#f7ece9;--cream:#fcf7f3;--ink:#2c2230;--ink3:#8a7b85;--line:#ecdfe2;--ok:#2e7d5b;--err:#b23a48}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Jost',Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.5}
+  h1,h2{font-family:'Cormorant Garamond',Georgia,serif;color:var(--plum)}
+  .bar{position:sticky;top:0;z-index:10;background:var(--plum);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:14px 18px}
+  .bar .logo{font-family:'Cormorant Garamond',serif;font-size:20px}
+  .bar .logo .s{color:var(--gold2)}
+  .wrap{max-width:720px;margin:0 auto;padding:18px}
+  .btn{border:none;cursor:pointer;font-family:'Jost';font-weight:600;font-size:15px;border-radius:40px;padding:13px 22px;transition:.15s}
+  .btn.gold{background:linear-gradient(120deg,var(--gold),var(--gold2));color:#3a2a10}
+  .btn.plum{background:var(--plum);color:#fff}
+  .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--plum)}
+  .btn.sm{padding:8px 14px;font-size:13px}
+  .btn:disabled{opacity:.5}
+  .btn.block{width:100%;justify-content:center}
+  input,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-family:inherit;font-size:16px;background:#fff}
+  label{display:block;font-size:12px;font-weight:600;color:#6a5f66;margin:10px 0 4px;letter-spacing:.02em}
+
+  /* login */
+  #login{max-width:400px;margin:8vh auto;background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px 26px;box-shadow:0 14px 40px rgba(51,16,42,.08)}
+  #login h1{font-size:30px;text-align:center}
+  #login p{text-align:center;color:var(--ink3);font-size:14px;margin-bottom:14px}
+
+  /* editor */
+  .hd{display:flex;align-items:center;justify-content:space-between;margin:4px 0 14px}
+  .hd h2{font-size:26px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:16px;box-shadow:0 8px 22px rgba(51,16,42,.05)}
+  .card .top{display:flex;gap:14px}
+  .photo{position:relative;width:120px;flex:0 0 120px;aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:var(--blush);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px dashed var(--gold)}
+  .photo img{width:100%;height:100%;object-fit:cover}
+  .photo .ph{color:var(--ink3);font-size:12px;text-align:center;padding:6px}
+  .photo .cam{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);background:rgba(51,16,42,.85);color:#fff;font-size:11px;padding:4px 10px;border-radius:20px;white-space:nowrap}
+  .fields{flex:1;min-width:0}
+  .two{display:flex;gap:10px}
+  .two>div{flex:1;min-width:0}
+  .card .row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}
+  .move button{background:#fff;border:1px solid var(--line);border-radius:8px;width:34px;height:34px;font-size:16px;cursor:pointer}
+  .del{background:#fff;border:1px solid #eecdd2;color:var(--err);border-radius:40px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer}
+  .savebar{position:sticky;bottom:0;background:linear-gradient(#fcf7f3aa,#fcf7f3);padding:14px 0;margin-top:8px}
+  .status{text-align:center;font-size:14px;margin-top:10px;min-height:20px}
+  .status.ok{color:var(--ok)}.status.err{color:var(--err)}
+  .hint{background:var(--blush);border:1px dashed var(--line);border-radius:12px;padding:12px 14px;font-size:13px;color:#6a5f66;margin-bottom:14px}
+  input[type=file]{display:none}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="logo">Glam <span class="s">Admin</span></div>
+  <button class="btn ghost sm" id="logoutBtn" style="display:none" onclick="logout()">Log out</button>
+</div>
+
+<!-- LOGIN -->
+<div id="login" style="display:none">
+  <h1>Salon Admin</h1>
+  <p>Sign in to manage braid styles &amp; photos</p>
+  <label>Email</label><input id="email" type="email" autocomplete="username" placeholder="info@glamsalondebeaute.com" />
+  <label>Password</label><input id="password" type="password" autocomplete="current-password" placeholder="••••••••" />
+  <button class="btn gold block" style="margin-top:16px" id="loginBtn" onclick="login()">Sign in</button>
+  <div class="status err" id="loginMsg"></div>
+  <p id="notConfigured" style="display:none;margin-top:12px">Admin isn't set up yet. Ask your developer to configure ADMIN_EMAIL, ADMIN_PASSWORD_HASH &amp; SESSION_SECRET.</p>
+</div>
+
+<!-- EDITOR -->
+<div id="editor" class="wrap" style="display:none">
+  <div class="hd">
+    <h2>Braid Styles</h2>
+    <button class="btn plum sm" onclick="addStyle()">+ Add style</button>
+  </div>
+  <div class="hint">📸 Tap a photo box to take a picture or choose one from your phone. Set the <b>price</b> and how long it takes (<b>duration</b>) so you can plan your day. Then <b>Save &amp; publish</b>.</div>
+  <div id="list"></div>
+  <button class="btn ghost block" onclick="addStyle()">+ Add another style</button>
+  <div class="savebar">
+    <button class="btn gold block" id="saveBtn" onclick="save()">Save &amp; publish</button>
+    <div class="status" id="saveMsg"></div>
+  </div>
+</div>
+
+<script>
+let styles = [];
+const $ = id => document.getElementById(id);
+const api = (url, opts) => fetch(url, Object.assign({ headers: { 'Content-Type': 'application/json' } }, opts)).then(async r => ({ ok: r.ok, status: r.status, data: await r.json().catch(() => ({})) }));
+
+async function boot(){
+  const { data } = await api('/admin/api/session');
+  if (!data.configured) { $('login').style.display='block'; $('notConfigured').style.display='block'; return; }
+  if (data.authed) { showEditor(); } else { $('login').style.display='block'; }
+}
+async function login(){
+  $('loginMsg').textContent=''; $('loginBtn').disabled=true;
+  const r = await api('/admin/api/login', { method:'POST', body: JSON.stringify({ email:$('email').value.trim(), password:$('password').value }) });
+  $('loginBtn').disabled=false;
+  if (r.ok) { showEditor(); } else { $('loginMsg').textContent = r.status===429 ? 'Too many attempts — try again in a few minutes.' : 'Incorrect email or password.'; }
+}
+async function logout(){ await api('/admin/api/logout',{method:'POST'}); location.reload(); }
+
+async function showEditor(){
+  $('login').style.display='none'; $('editor').style.display='block'; $('logoutBtn').style.display='inline-block';
+  const r = await api('/admin/api/styles');
+  styles = (r.data && Array.isArray(r.data.styles)) ? r.data.styles : [];
+  if (!styles.length) addStyle(); else render();
+}
+
+function addStyle(){ styles.push({ id:'', name:'', price:'', duration:'', desc:'', image:'' }); render(); window.scrollTo(0,document.body.scrollHeight); }
+function removeStyle(i){ if(confirm('Remove this style?')){ styles.splice(i,1); render(); } }
+function move(i,d){ const j=i+d; if(j<0||j>=styles.length) return; const t=styles[i]; styles[i]=styles[j]; styles[j]=t; render(); }
+function upd(i,k,v){ styles[i][k]=v; }
+
+function render(){
+  $('list').innerHTML = styles.map((s,i)=>`
+    <div class="card">
+      <div class="top">
+        <label class="photo" for="file-${i}">
+          ${s.image?`<img src="${s.image}" alt="">`:`<span class="ph">Tap to add photo</span>`}
+          <span class="cam">📷 ${s.image?'Change':'Add photo'}</span>
+        </label>
+        <input type="file" id="file-${i}" accept="image/*" onchange="pick(${i}, this)">
+        <div class="fields">
+          <label>Style name</label>
+          <input value="${att(s.name)}" placeholder="e.g. Box Braids" oninput="upd(${i},'name',this.value)">
+          <div class="two">
+            <div><label>Price</label><input value="${att(s.price)}" placeholder="$150" oninput="upd(${i},'price',this.value)"></div>
+            <div><label>Duration</label><input value="${att(s.duration)}" placeholder="4–6 hrs" oninput="upd(${i},'duration',this.value)"></div>
+          </div>
+        </div>
+      </div>
+      <label>Description</label>
+      <textarea rows="2" placeholder="Short description…" oninput="upd(${i},'desc',this.value)">${esc(s.desc)}</textarea>
+      <div class="row">
+        <span class="move"><button onclick="move(${i},-1)" title="Move up">↑</button> <button onclick="move(${i},1)" title="Move down">↓</button></span>
+        <button class="del" onclick="removeStyle(${i})">Remove</button>
+      </div>
+    </div>`).join('');
+}
+function esc(s){ return String(s==null?'':s).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])); }
+function att(s){ return esc(s).replace(/"/g,'&quot;'); }
+
+async function pick(i, input){
+  const file = input.files && input.files[0]; if(!file) return;
+  const lab = input.previousElementSibling; const cam = lab.querySelector('.cam'); const old = cam.textContent; cam.textContent='⏳ Optimizing…';
+  try { styles[i].image = await compress(file); render(); }
+  catch(e){ alert('Could not read that image. Try another photo.'); cam.textContent=old; }
+}
+function compress(file){
+  return new Promise((resolve,reject)=>{
+    const img=new Image(); const url=URL.createObjectURL(file);
+    img.onload=()=>{
+      URL.revokeObjectURL(url);
+      let w=img.width,h=img.height; const MAX=900;
+      if(w>=h && w>MAX){ h=Math.round(h*MAX/w); w=MAX; } else if(h>w && h>MAX){ w=Math.round(w*MAX/h); h=MAX; }
+      const c=document.createElement('canvas'); c.width=w; c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      let q=0.72, data=c.toDataURL('image/jpeg',q);
+      while(data.length>1500000 && q>0.4){ q-=0.1; data=c.toDataURL('image/jpeg',q); }
+      resolve(data);
+    };
+    img.onerror=()=>{ URL.revokeObjectURL(url); reject(new Error('bad image')); };
+    img.src=url;
+  });
+}
+
+async function save(){
+  const clean = styles.filter(s=>String(s.name||'').trim());
+  $('saveBtn').disabled=true; const m=$('saveMsg'); m.className='status'; m.textContent='Saving…';
+  const r = await api('/admin/api/styles', { method:'POST', body: JSON.stringify({ styles: clean }) });
+  $('saveBtn').disabled=false;
+  if (r.ok && r.data.saved){
+    m.className='status ok';
+    m.textContent = r.data.committed ? `✓ Saved & published (${r.data.count} styles). Your site updates in ~1 min.` : '✓ Saved. ' + (r.data.note||'');
+  } else if (r.status===401){ m.className='status err'; m.textContent='Session expired — please log in again.'; setTimeout(()=>location.reload(),1200); }
+  else { m.className='status err'; m.textContent='Could not save. '+(r.data.error||''); }
+}
+boot();
+</script>
+</body>
+</html>

@@ -83,6 +83,7 @@
   .photo::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(33,10,27,.62))}
   .photo .nm{position:relative;z-index:2;font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;text-shadow:0 1px 8px rgba(0,0,0,.4)}
   .photo .price{position:absolute;top:14px;right:14px;z-index:2;background:rgba(255,255,255,.92);color:var(--plum);font-size:12px;font-weight:600;padding:5px 12px;border-radius:30px}
+  .photo .dur{position:absolute;top:14px;left:14px;z-index:2;background:rgba(51,16,42,.82);color:#fff;font-size:11.5px;font-weight:500;padding:5px 11px;border-radius:30px}
   .style .meta{padding:16px 18px 20px}
   .style .meta p{color:var(--ink3);font-size:13.5px}
   .style .meta a{display:inline-block;margin-top:10px;color:var(--gold);font-weight:600;font-size:13px;letter-spacing:.04em}
@@ -319,28 +320,36 @@
 
 <script>
   const IMG=(id,w=640,h=820)=>`https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&q=72&auto=format`;
-  const STYLES = [
-    ['Box Braids','Timeless, versatile and protective — from waist‑length to bob.','$150','1594254773847-9fce26e950bc'],
-    ['Knotless Braids','Lightweight, natural‑looking and gentle on your edges.','$180','1572955304332-bf714bd49add'],
-    ['Cornrows','Sleek straight‑backs or intricate freestyle designs.','$80','1673470907547-1c0c6a996095'],
-    ['Goddess Braids','Bohemian curls woven through for a soft, romantic finish.','$160','1631955081622-fb57ae4cb686'],
-    ['Faux Locs','Boho or sleek faux locs for effortless, lasting glam.','$200','1593529334658-a243a47ad02e'],
-    ['Senegalese Twists','Smooth, rope‑like twists with a polished shine.','$170','1759756655332-d66200497312'],
-    ['Fulani Braids','Statement cornrow‑and‑braid patterns with beads.','$140','1614173968962-0e61c5ed196f'],
-    ['Feed‑in Braids','Natural, seamless ponytails and protective updos.','$90','1698299708000-bb14e23fe2df'],
+  const esc=s=>String(s==null?'':s).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+  const DEFAULTS = [
+    {name:'Box Braids',desc:'Timeless, versatile and protective — from waist‑length to bob.',price:'$150',duration:'4–6 hrs',image:IMG('1594254773847-9fce26e950bc')},
+    {name:'Knotless Braids',desc:'Lightweight, natural‑looking and gentle on your edges.',price:'$180',duration:'5–7 hrs',image:IMG('1572955304332-bf714bd49add')},
+    {name:'Cornrows',desc:'Sleek straight‑backs or intricate freestyle designs.',price:'$80',duration:'1–2 hrs',image:IMG('1673470907547-1c0c6a996095')},
+    {name:'Goddess Braids',desc:'Bohemian curls woven through for a soft, romantic finish.',price:'$160',duration:'3–4 hrs',image:IMG('1631955081622-fb57ae4cb686')},
+    {name:'Faux Locs',desc:'Boho or sleek faux locs for effortless, lasting glam.',price:'$200',duration:'5–8 hrs',image:IMG('1593529334658-a243a47ad02e')},
+    {name:'Senegalese Twists',desc:'Smooth, rope‑like twists with a polished shine.',price:'$170',duration:'4–6 hrs',image:IMG('1759756655332-d66200497312')},
+    {name:'Fulani Braids',desc:'Statement cornrow‑and‑braid patterns with beads.',price:'$140',duration:'3–4 hrs',image:IMG('1614173968962-0e61c5ed196f')},
+    {name:'Feed‑in Braids',desc:'Natural, seamless ponytails and protective updos.',price:'$90',duration:'1.5–2 hrs',image:IMG('1698299708000-bb14e23fe2df')},
   ];
-  document.getElementById('lookgrid').innerHTML = STYLES.map(([n,d,p,id])=>`
-    <div class="style">
-      <div class="photo" style="background-image:url('${IMG(id)}')">
-        <span class="price">from ${p}</span>
-        <span class="nm">${n}</span>
-      </div>
-      <div class="meta"><p>${d}</p><a href="#book">Book this style →</a></div>
-    </div>`).join('');
-  const REEL = ['1594254773847-9fce26e950bc','1572955304332-bf714bd49add','1673470907547-1c0c6a996095','1593529334658-a243a47ad02e','1759756655332-d66200497312','1606416132922-22ab37c1231e','1648010035195-6b0a56e14667','1698299708000-bb14e23fe2df','1598461209732-946389b57e7c','1631955081622-fb57ae4cb686','1695141197936-caf67b34a25c','1614173968962-0e61c5ed196f'];
-  document.getElementById('reeltrack').innerHTML = REEL.concat(REEL).map(id=>`<img src="${IMG(id,520,690)}" alt="Braided hairstyle by Glam Salon de Beauté" loading="eager">`).join('');
+  const REEL_FB = ['1594254773847-9fce26e950bc','1572955304332-bf714bd49add','1673470907547-1c0c6a996095','1593529334658-a243a47ad02e','1759756655332-d66200497312','1606416132922-22ab37c1231e','1648010035195-6b0a56e14667','1698299708000-bb14e23fe2df','1598461209732-946389b57e7c','1631955081622-fb57ae4cb686','1695141197936-caf67b34a25c','1614173968962-0e61c5ed196f'].map(id=>IMG(id,520,690));
 
-  document.getElementById('b-service').innerHTML = STYLES.map(s=>`<option>${s[0]}</option>`).join('') + '<option>Other / Consultation</option>';
+  function renderStyles(styles){
+    const list = (Array.isArray(styles) && styles.length) ? styles : DEFAULTS;
+    document.getElementById('lookgrid').innerHTML = list.map(s=>`
+      <div class="style">
+        <div class="photo" style="background-image:url('${String(s.image||'').replace(/'/g,'%27')}')">
+          ${s.duration?`<span class="dur">⏱ ${esc(s.duration)}</span>`:''}
+          ${s.price?`<span class="price">from ${esc(s.price)}</span>`:''}
+          <span class="nm">${esc(s.name)}</span>
+        </div>
+        <div class="meta"><p>${esc(s.desc)}</p><a href="#book">Book this style →</a></div>
+      </div>`).join('');
+    const imgs = list.filter(s=>s.image).map(s=>s.image);
+    const reel = imgs.length>=6 ? imgs : REEL_FB;
+    document.getElementById('reeltrack').innerHTML = reel.concat(reel).map(src=>`<img src="${String(src).replace(/"/g,'%22')}" alt="Braided hairstyle by Glam Salon de Beauté" loading="eager">`).join('');
+    document.getElementById('b-service').innerHTML = list.map(s=>`<option>${esc(s.name)}</option>`).join('') + '<option>Other / Consultation</option>';
+  }
+  fetch('/api/styles',{cache:'no-store'}).then(r=>r.json()).then(d=>renderStyles(d&&d.styles)).catch(()=>renderStyles(DEFAULTS));
   const v = id => document.getElementById(id).value.trim();
   async function submitBooking(e){
     e.preventDefault();
