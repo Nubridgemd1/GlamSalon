@@ -5,7 +5,7 @@
  * Zero npm dependencies (uses built-in http + global fetch).
  *
  * Booking requests (POST /api/book) are delivered in real time to:
- *   • Email  -> BOOKING_EMAIL (default estherngandji2437@yahoo.com) via Resend
+ *   • Email  -> BOOKING_EMAIL (default info@glamsalondebeaute.com) via Resend
  *   • SMS    -> BOOKING_PHONE (default +12815412536) via Twilio
  * Each channel activates only when its env keys are present:
  *   Email: RESEND_API_KEY (+ GLAM_MAIL_FROM, a verified Resend sender)
@@ -18,7 +18,7 @@ const path = require('node:path');
 
 const PORT = process.env.PORT || 8080;
 const ROOT = path.join(__dirname, 'public');
-const BOOKING_EMAIL = process.env.BOOKING_EMAIL || 'estherngandji2437@yahoo.com';
+const BOOKING_EMAIL = process.env.BOOKING_EMAIL || 'info@glamsalondebeaute.com';
 const BOOKING_PHONE = process.env.BOOKING_PHONE || '+12815412536';
 // AT&T email-to-SMS gateway → delivers booking alerts as a text via Resend (no Twilio needed)
 const BOOKING_SMS_EMAIL = process.env.BOOKING_SMS_EMAIL || '2815412536@txt.att.net';
