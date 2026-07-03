@@ -54,6 +54,24 @@
   .head p{color:var(--ink3);font-size:17px}
   .head .script{color:var(--rose);font-size:1.3em}
 
+  /* google reviews */
+  .greviews{background:var(--blush)}
+  .gcard{max-width:760px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:22px;padding:40px 34px;text-align:center;box-shadow:0 14px 40px rgba(51,16,42,.07)}
+  .gcard .glogo{font-family:'Jost',sans-serif;font-weight:600;font-size:26px;letter-spacing:-.02em}
+  .gcard .glogo .b{color:#4285F4}.gcard .glogo .r{color:#EA4335}.gcard .glogo .y{color:#FBBC05}.gcard .glogo .g{color:#34A853}
+  .gcard .rate{font-family:'Cormorant Garamond',serif;font-size:64px;color:var(--plum);line-height:1;margin-top:10px}
+  .gcard .rstars{color:#FBBC05;font-size:30px;letter-spacing:4px;margin-top:4px}
+  .gcard .rsub{color:var(--ink3);font-size:15px;margin-top:8px}
+  .gcard .gcta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+  .btn-google{background:#fff;border:1.5px solid var(--line);color:var(--plum);display:inline-flex;align-items:center;gap:9px}
+  .btn-google:hover{border-color:var(--gold)}
+  .rquotes{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:960px;margin:34px auto 0}
+  @media(max-width:820px){.rquotes{grid-template-columns:1fr}}
+  .rq{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;text-align:left}
+  .rq .s{color:#FBBC05;letter-spacing:2px}
+  .rq p{font-size:14px;color:var(--ink);margin:8px 0 12px}
+  .rq .who{font-size:13px;color:var(--ink3);font-weight:500}
+
   /* lookbook */
   .look{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
   @media(max-width:980px){.look{grid-template-columns:repeat(2,1fr)}}
@@ -146,6 +164,7 @@
     <nav class="links">
       <a href="#styles">Braid Styles</a>
       <a href="#why">Why Us</a>
+      <a href="#reviews">Reviews</a>
       <a href="#business">Start a Business</a>
       <a href="#book">Book</a>
     </nav>
@@ -195,6 +214,27 @@
       <div><div class="ic">🌿</div><h3>Healthy hair first</h3><p>Protective techniques and quality hair that care for your edges and scalp.</p></div>
       <div><div class="ic">✨</div><h3>Bespoke &amp; unhurried</h3><p>By‑appointment service so you get our full attention, every visit.</p></div>
     </div>
+  </div>
+</section>
+
+<section class="sec greviews" id="reviews">
+  <div class="wrap">
+    <div class="head">
+      <div class="k">Loved by our clients</div>
+      <h2>Rated on <span class="script">Google</span></h2>
+      <p>Your kind words mean everything — and help other clients find us.</p>
+    </div>
+    <div class="gcard">
+      <div class="glogo"><span class="b">G</span><span class="r">o</span><span class="y">o</span><span class="b">g</span><span class="g">l</span><span class="r">e</span> Reviews</div>
+      <div class="rate" id="gRate">5.0</div>
+      <div class="rstars" id="gStars">★★★★★</div>
+      <div class="rsub" id="gSub">Based on our happy clients on Google</div>
+      <div class="gcta">
+        <a id="gLeave" class="btn btn-gold" target="_blank" rel="noopener">★ Leave us a Google review</a>
+        <a id="gRead" class="btn btn-google" target="_blank" rel="noopener">Read our reviews</a>
+      </div>
+    </div>
+    <div class="rquotes" id="rquotes"></div>
   </div>
 </section>
 
@@ -291,6 +331,7 @@
   document.getElementById('lookgrid').innerHTML = STYLES.map(([n,d,p,id])=>`
     <div class="style">
       <div class="photo" style="background-image:url('${IMG(id)}')">
+        <span class="price">from ${p}</span>
         <span class="nm">${n}</span>
       </div>
       <div class="meta"><p>${d}</p><a href="#book">Book this style →</a></div>
@@ -319,6 +360,34 @@
     btn.disabled=false; return false;
   }
   window.submitBooking = submitBooking;
+
+  /* ── Google Reviews ───────────────────────────────────────────────
+     To make these DIRECT links + show a live count, set placeId or the
+     g.page review short-link below (from the salon's Google Business Profile).
+     Until then, buttons open the salon's Google listing search.            */
+  const REVIEWS = {
+    placeId: '',        // e.g. 'ChIJXXXXXXXXXXXX'
+    gpageReview: '',    // e.g. 'https://g.page/r/XXXXXXXX/review'
+    rating: '5.0',
+    count: '',          // e.g. 'Based on 27 Google reviews'
+    quotes: []          // e.g. [{stars:5,text:'Best braids in Stafford!',who:'— Adaeze O.'}]
+  };
+  (function(){
+    const q = 'Glam Braiding Salon de Beaute 802 Texas Parkway Suite F Stafford TX 77477';
+    const mapsSearch = 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+    const writeUrl = REVIEWS.gpageReview || (REVIEWS.placeId ? 'https://search.google.com/local/writereview?placeid='+REVIEWS.placeId : mapsSearch);
+    const readUrl  = REVIEWS.placeId ? 'https://search.google.com/local/reviews?placeid='+REVIEWS.placeId : mapsSearch;
+    const set=(id,fn)=>{const el=document.getElementById(id);if(el)fn(el);};
+    set('gLeave',el=>el.href=writeUrl);
+    set('gRead', el=>el.href=readUrl);
+    set('gRate', el=>el.textContent=REVIEWS.rating);
+    if(REVIEWS.count) set('gSub',el=>el.textContent=REVIEWS.count);
+    set('rquotes',el=>{
+      if(REVIEWS.quotes.length){
+        el.innerHTML=REVIEWS.quotes.map(r=>`<div class="rq"><div class="s">${'★'.repeat(r.stars||5)}</div><p>“${r.text}”</p><div class="who">${r.who||''}</div></div>`).join('');
+      } else { el.remove(); }
+    });
+  })();
 </script>
 </body>
 </html>
