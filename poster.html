@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glam Salon de Beauté — Booking Poster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Great+Vibes&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--plum:#33102a;--wine:#5d1c46;--gold:#caa14e;--gold2:#e6c878;--cream:#fbf6f2}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Jost',Arial,sans-serif;background:#e7dcd6;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+  .poster{width:794px;height:1123px;position:relative;overflow:hidden;color:#fff;
+    background:radial-gradient(ellipse 90% 60% at 50% 0%, #7a2658 0%, var(--plum) 52%, #200a1b 100%);
+    display:flex;flex-direction:column;align-items:center;text-align:center;padding:64px 56px}
+  .poster::after{content:'';position:absolute;inset:0;background:
+    radial-gradient(circle at 50% 12%, rgba(230,200,120,.20), transparent 46%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='70'%3E%3Cpath d='M0 35 Q17 0 35 35 T70 35' fill='none' stroke='%23caa14e' stroke-opacity='0.07' stroke-width='2'/%3E%3C/svg%3E");pointer-events:none}
+  .poster>*{position:relative;z-index:2}
+  .frame{position:absolute;inset:26px;border:1.5px solid rgba(230,200,120,.4);border-radius:8px;z-index:1}
+  .eyebrow{font-size:15px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold2);font-weight:500;margin-top:14px}
+  .name{font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:600;line-height:1;margin-top:18px}
+  .name .s{font-family:'Great Vibes',cursive;font-weight:400;color:var(--gold2);font-size:78px;display:block;margin-top:-4px}
+  .rule{width:90px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:26px auto 0}
+  .tag{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:27px;color:rgba(255,255,255,.9);margin-top:24px;max-width:520px}
+  .qrwrap{background:#fff;border-radius:26px;padding:34px 34px 26px;margin-top:40px;box-shadow:0 26px 60px rgba(0,0,0,.4)}
+  .qrwrap img{width:336px;height:336px;display:block}
+  .qrwrap .scan{color:var(--plum);font-family:'Cormorant Garamond',serif;font-weight:700;font-size:26px;letter-spacing:.04em;margin-top:14px}
+  .cta{font-size:21px;color:#fff;margin-top:30px;font-weight:300}
+  .cta b{color:var(--gold2);font-weight:600}
+  .styles{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:26px;max-width:560px}
+  .chip{font-size:14px;border:1px solid rgba(230,200,120,.45);border-radius:30px;padding:7px 16px;color:rgba(255,255,255,.88)}
+  .foot{margin-top:auto;width:100%;padding-top:24px;border-top:1px solid rgba(255,255,255,.16)}
+  .foot .web{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--gold2);font-weight:600}
+  .foot .info{font-size:14.5px;color:rgba(255,255,255,.78);margin-top:8px;line-height:1.7}
+  .print-hint{position:fixed;top:14px;right:14px;background:var(--plum);color:#fff;font-size:13px;padding:9px 14px;border-radius:8px;cursor:pointer;z-index:50}
+  @media print{
+    @page{size:A4 portrait;margin:0}
+    html,body{background:#fff;padding:0;margin:0}
+    .poster{width:210mm;height:297mm;box-shadow:none}
+    .print-hint{display:none}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+  <div class="print-hint" onclick="window.print()">🖨 Print / Save as PDF</div>
+  <div class="poster">
+    <div class="frame"></div>
+    <div class="eyebrow">Braiding Artistry</div>
+    <div class="name">Glam Salon<span class="s">de Beauté</span></div>
+    <div class="rule"></div>
+    <div class="tag">Where every braid is a masterpiece.</div>
+
+    <div class="qrwrap">
+      <img src="book-qr.svg" alt="Scan to book at glamsalondebeaute.com">
+      <div class="scan">SCAN TO BOOK</div>
+    </div>
+
+    <div class="cta">Book your appointment <b>online in seconds</b></div>
+    <div class="styles">
+      <span class="chip">Box Braids</span><span class="chip">Knotless</span><span class="chip">Cornrows</span>
+      <span class="chip">Goddess Braids</span><span class="chip">Faux Locs</span><span class="chip">Twists</span>
+    </div>
+
+    <div class="foot">
+      <div class="web">glamsalondebeaute.com</div>
+      <div class="info">802 Texas Parkway, Suite F · Stafford, TX 77477 &nbsp;|&nbsp; (281) 541‑2536<br>Open Tue – Sat · 9am – 7pm · By appointment</div>
+    </div>
+  </div>
+</body>
+</html>
